@@ -1,0 +1,13 @@
+{
+  "name": "euglena.organelle.nucleus.js",
+  "version": "0.0.1",
+  "description": "",
+  "main": "src/euglena.organelle.nucleus.js.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "codelovesme",
+  "license": "GPL v2",
+  "dependencies": {
+  }
+}
