@@ -1,15 +1,11 @@
+/// <reference path="../typings/node/node.d.ts" />
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var euglena_template_1 = require("../node_modules/euglena/euglena_template/src/euglena_template");
-var euglena_1 = require("../node_modules/euglena/euglena/src/euglena");
-var path = require("path");
+const euglena_template_1 = require("euglena.template");
+const euglena_1 = require("euglena");
+const path = require("path");
 var Body = euglena_1.euglena.being.alive.Body;
-var Gene = (function () {
-    function Gene(name, triggers, // particle prop - value match
+class Gene {
+    constructor(name, triggers, // particle prop - value match
         reaction, override, expiretime) {
         this.name = name;
         this.triggers = triggers;
@@ -17,28 +13,25 @@ var Gene = (function () {
         this.override = override;
         this.expiretime = expiretime;
     }
-    return Gene;
-})();
+}
 exports.Gene = Gene;
-var GarbageCollector = (function () {
-    function GarbageCollector(chromosome) {
+class GarbageCollector {
+    constructor(chromosome) {
         //private timeout = 3600000;
         this.timeout = 1000;
         this.chromosome = [];
         this.chromosome = chromosome;
     }
-    GarbageCollector.prototype.start = function () {
-        var chromosome = this.chromosome;
-        setInterval(function () {
-            var toBeRemoved = [];
-            for (var _i = 0; _i < chromosome.length; _i++) {
-                var a = chromosome[_i];
+    start() {
+        let chromosome = this.chromosome;
+        setInterval(() => {
+            let toBeRemoved = [];
+            for (let a of chromosome) {
                 if (a.expiretime && euglena_1.euglena.sys.type.StaticTools.Time.biggerThan(euglena_1.euglena.sys.type.StaticTools.Time.now(), a.expiretime)) {
                     toBeRemoved.push(a.name);
                 }
             }
-            for (var _a = 0; _a < toBeRemoved.length; _a++) {
-                var b = toBeRemoved[_a];
+            for (let b of toBeRemoved) {
                 for (var index = 0; index < chromosome.length; index++) {
                     var element = chromosome[index];
                     if (element.name === b) {
@@ -48,28 +41,27 @@ var GarbageCollector = (function () {
                 }
             }
         }, this.timeout);
-    };
-    return GarbageCollector;
-})();
-exports.GarbageCollector = GarbageCollector;
-var Organelle = (function (_super) {
-    __extends(Organelle, _super);
-    function Organelle() {
-        _super.call(this, "NucleusOrganelleImplJs");
     }
-    Organelle.prototype.receive = function (particle, response) {
+}
+exports.GarbageCollector = GarbageCollector;
+class Organelle extends euglena_template_1.euglena_template.being.alive.organelles.Nucleus {
+    constructor() {
+        super("NucleusOrganelleImplJs");
+    }
+    receive(particle, response) {
         if (particle.name === "LoadGenes") {
             this.loadGenes();
             return;
         }
         console.log("Organelle Nucleus says received particle " + particle.name);
         //find which genes are matched with properties of the particle 
-        var triggerableReactions = new Array();
+        let particleAny = particle;
+        let triggerableReactions = new Array();
         for (var i = 0; i < this.chromosome.length; i++) {
-            var triggers = this.chromosome[i].triggers;
-            var matched = true;
-            for (var key in triggers) {
-                if ((particle[key] === triggers[key])) {
+            let triggers = this.chromosome[i].triggers;
+            let matched = true;
+            for (let key in triggers) {
+                if ((particleAny[key] === triggers[key])) {
                     matched = true;
                     break;
                 }
@@ -81,13 +73,11 @@ var Organelle = (function (_super) {
             }
         }
         //get rid of overrided reactions
-        var reactions = Array();
-        for (var _i = 0; _i < triggerableReactions.length; _i++) {
-            var tr = triggerableReactions[_i];
-            var doTrigger = true;
+        let reactions = Array();
+        for (let tr of triggerableReactions) {
+            let doTrigger = true;
             //Check if the tr is contained by others, if true
-            for (var _a = 0; _a < triggerableReactions.length; _a++) {
-                var tr2 = triggerableReactions[_a];
+            for (let tr2 of triggerableReactions) {
                 //if it is the same object, do nothing 
                 if (tr.index === tr2.index)
                     continue;
@@ -102,26 +92,24 @@ var Organelle = (function (_super) {
             }
         }
         //trigger collected reactions
-        for (var _b = 0; _b < reactions.length; _b++) {
-            var reaction_1 = reactions[_b];
+        for (let reaction of reactions) {
             try {
-                reaction_1(particle, Body.instance, response);
+                reaction(particle, Body.instance, response);
             }
             catch (e) {
                 console.log(e);
                 response(new euglena_template_1.euglena_template.being.alive.particles.Exception(new euglena_1.euglena.sys.type.Exception(e.message), this.name));
             }
         }
-    };
-    Organelle.prototype.loadGenes = function () {
-        var chromosomeFile = this.initialProperties.chromosomeFile;
+    }
+    loadGenes() {
+        let chromosomeFile = this.initialProperties.chromosomeFile;
         if (!this.initialProperties.chromosomeFile) {
-            var appDir = path.dirname(require.main.filename);
+            let appDir = path.dirname(require.main.filename);
             chromosomeFile = path.join(appDir, '../', 'genes/chromosome');
         }
         this.chromosome = require(chromosomeFile).chromosome;
-    };
-    return Organelle;
-})(euglena_template_1.euglena_template.being.alive.organelles.Nucleus);
+    }
+}
 exports.Organelle = Organelle;
 //# sourceMappingURL=euglena.organelle.nucleus.js.js.map

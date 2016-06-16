@@ -1,8 +1,10 @@
+/// <reference path="../typings/node/node.d.ts" />
+
 "use strict";
-import {euglena_template} from "../node_modules/euglena/euglena_template/src/euglena_template";
-import {euglena} from "../node_modules/euglena/euglena/src/euglena";
+
+import {euglena_template} from "euglena.template";
+import {euglena} from "euglena";
 import * as path from "path";
-import * as fs from "fs";
 import interaction = euglena.being.interaction;
 import Particle = euglena.being.Particle;
 import ParticleReference = euglena.being.alive.dna.ParticleReference;
@@ -70,12 +72,13 @@ export class Organelle extends euglena_template.being.alive.organelles.Nucleus {
 
         console.log("Organelle Nucleus says received particle " + particle.name);
         //find which genes are matched with properties of the particle 
+        let particleAny = <any>particle;
         let triggerableReactions = new Array<{ index: number, triggers: string[], reaction: Reaction }>();
         for (var i = 0; i < this.chromosome.length; i++) {
-            let triggers = this.chromosome[i].triggers;
+            let triggers:any = this.chromosome[i].triggers;
             let matched = true;
             for (let key in triggers) {
-                if ((particle[key] === triggers[key])) {
+                if ((particleAny[key] === triggers[key])) {
                     matched = true;
                     break;
                 }

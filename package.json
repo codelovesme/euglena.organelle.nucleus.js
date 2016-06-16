@@ -9,5 +9,7 @@
   "author": "codelovesme",
   "license": "GPL v2",
   "dependencies": {
+    "euglena":"https://github.com/codelovesme/euglena.git#develop",
+    "euglena.template": "https://github.com/codelovesme/euglena.template.git"
   }
 }
