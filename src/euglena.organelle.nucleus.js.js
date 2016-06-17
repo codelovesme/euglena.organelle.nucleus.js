@@ -3,7 +3,6 @@
 const euglena_template_1 = require("euglena.template");
 const euglena_1 = require("euglena");
 const path = require("path");
-var Body = euglena_1.euglena.being.alive.Body;
 class Gene {
     constructor(name, triggers, // particle prop - value match
         reaction, override, expiretime) {
@@ -94,7 +93,7 @@ class Organelle extends euglena_template_1.euglena_template.being.alive.organell
         //trigger collected reactions
         for (let reaction of reactions) {
             try {
-                reaction(particle, Body.instance, response);
+                reaction(particle, this.initialProperties.body, response);
             }
             catch (e) {
                 console.log(e);

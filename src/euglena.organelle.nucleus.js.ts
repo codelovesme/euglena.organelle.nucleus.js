@@ -110,7 +110,7 @@ export class Organelle extends euglena_template.being.alive.organelles.Nucleus {
         //trigger collected reactions
         for (let reaction of reactions) {
             try {
-                reaction(particle, Body.instance, response);
+                reaction(particle, this.initialProperties.body, response);
             } catch (e) {
                 console.log(e);
                 response(new euglena_template.being.alive.particles.Exception(new euglena.sys.type.Exception(e.message), this.name));
