@@ -109,7 +109,7 @@ class Organelle extends euglena_template_1.euglena_template.being.alive.organell
             chromosomeFile = path.join(appDir, '../', 'genes/chromosome');
         }
         this.chromosome = require(chromosomeFile).chromosome;
-        response(new euglena_template_1.euglena_template.being.alive.particles.Acknowledge(euglena_1.euglena.organelle.nucleus, "));));
+        response(new euglena_template_1.euglena_template.being.alive.particles.Acknowledge("nucleus"));
     }
 }
 exports.Organelle = Organelle;
