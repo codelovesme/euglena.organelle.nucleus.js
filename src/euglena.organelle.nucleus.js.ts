@@ -11,6 +11,7 @@ import ParticleReference = euglena.being.alive.dna.ParticleReference;
 import Body = euglena.being.alive.Body;
 import sys = euglena.sys;
 import Time = euglena.sys.type.Time;
+import Response= euglena.being.interaction.Response;
 
 export interface Reaction {
     (particle: Particle, body: Body, response: interaction.Response): void;
@@ -66,7 +67,7 @@ export class Organelle extends euglena_template.being.alive.organelles.Nucleus {
     public receive(particle: Particle, response: interaction.Response) {
 
         if (particle.name === "LoadGenes") {
-            this.loadGenes();
+            this.loadGenes(response);
             return;
         }
 
@@ -116,12 +117,13 @@ export class Organelle extends euglena_template.being.alive.organelles.Nucleus {
             }
         }
     }
-    private loadGenes(): void {
+    private loadGenes(response:Response): void {
         let chromosomeFile = this.initialProperties.chromosomeFile;
         if (!this.initialProperties.chromosomeFile) {
             let appDir = path.dirname(require.main.filename);
             chromosomeFile = path.join(appDir, '../', 'genes/chromosome');
         }
         this.chromosome = require(chromosomeFile).chromosome;
+        response(new euglena_template.being.alive.particles.Acknowledge("nucleus"));
     }
 }

@@ -50,7 +50,7 @@ class Organelle extends euglena_template_1.euglena_template.being.alive.organell
     }
     receive(particle, response) {
         if (particle.name === "LoadGenes") {
-            this.loadGenes();
+            this.loadGenes(response);
             return;
         }
         console.log("Organelle Nucleus says received particle " + particle.name);
@@ -102,13 +102,14 @@ class Organelle extends euglena_template_1.euglena_template.being.alive.organell
             }
         }
     }
-    loadGenes() {
+    loadGenes(response) {
         let chromosomeFile = this.initialProperties.chromosomeFile;
         if (!this.initialProperties.chromosomeFile) {
             let appDir = path.dirname(require.main.filename);
             chromosomeFile = path.join(appDir, '../', 'genes/chromosome');
         }
         this.chromosome = require(chromosomeFile).chromosome;
+        response(new euglena_template_1.euglena_template.being.alive.particles.Acknowledge(euglena_1.euglena.organelle.nucleus, "));));
     }
 }
 exports.Organelle = Organelle;

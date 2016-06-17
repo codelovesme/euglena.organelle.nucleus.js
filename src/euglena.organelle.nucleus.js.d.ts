@@ -27,5 +27,5 @@ export declare class Organelle extends euglena_template.being.alive.organelles.N
     private chromosome;
     constructor();
     receive(particle: Particle, response: interaction.Response): void;
-    private loadGenes();
+    private loadGenes(response);
 }
