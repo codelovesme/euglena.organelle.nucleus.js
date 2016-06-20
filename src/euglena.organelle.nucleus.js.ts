@@ -73,19 +73,10 @@ export class Organelle extends euglena_template.being.alive.organelles.Nucleus {
 
         console.log("Organelle Nucleus says received particle " + particle.name);
         //find which genes are matched with properties of the particle 
-        let particleAny = <any>particle;
         let triggerableReactions = new Array<{ index: number, triggers: string[], reaction: Reaction }>();
         for (var i = 0; i < this.chromosome.length; i++) {
-            let triggers:any = this.chromosome[i].triggers;
-            let matched = true;
-            for (let key in triggers) {
-                if ((particleAny[key] === triggers[key])) {
-                    matched = true;
-                    break;
-                }
-                matched = false;
-            }
-            if (matched) {
+            let triggers: any = this.chromosome[i].triggers;
+            if (euglena.js.Class.doesCover(particle,triggers)){
                 var reaction = this.chromosome[i].reaction;
                 triggerableReactions.push({ index: i, triggers: Object.keys(triggers), reaction: reaction });
             }
