@@ -1,12 +1,11 @@
 /// <reference path="../typings/node/node.d.ts" />
 import { euglena_template } from "euglena.template";
 import { euglena } from "euglena";
-import interaction = euglena.being.interaction;
 import Particle = euglena.being.Particle;
 import Body = euglena.being.alive.Body;
 import Time = euglena.sys.type.Time;
 export interface Reaction {
-    (particle: Particle, body: Body, response: interaction.Response): void;
+    (particle: Particle, body: Body): void;
 }
 export declare class Gene implements euglena.sys.type.Named {
     name: string;
@@ -26,6 +25,6 @@ export declare class Organelle extends euglena_template.being.alive.organelles.N
     private time;
     private chromosome;
     constructor();
-    receive(particle: Particle, response: interaction.Response): void;
-    private loadGenes(response);
+    receive(particle: Particle): void;
+    private loadGenes();
 }

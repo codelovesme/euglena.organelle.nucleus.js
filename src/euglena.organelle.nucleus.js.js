@@ -47,9 +47,9 @@ class Organelle extends euglena_template_1.euglena_template.being.alive.organell
     constructor() {
         super("NucleusOrganelleImplJs");
     }
-    receive(particle, response) {
+    receive(particle) {
         if (particle.name === "LoadGenes") {
-            this.loadGenes(response);
+            this.loadGenes();
             return;
         }
         console.log("Organelle Nucleus says received particle " + particle.name);
@@ -84,22 +84,21 @@ class Organelle extends euglena_template_1.euglena_template.being.alive.organell
         //trigger collected reactions
         for (let reaction of reactions) {
             try {
-                reaction(particle, this.initialProperties.body, response);
+                reaction(particle, this.initialProperties.body);
             }
             catch (e) {
                 console.log(e);
-                response(new euglena_template_1.euglena_template.being.alive.particles.Exception(new euglena_1.euglena.sys.type.Exception(e.message), this.name));
             }
         }
     }
-    loadGenes(response) {
+    loadGenes() {
         let chromosomeFile = this.initialProperties.chromosomeFile;
         if (!this.initialProperties.chromosomeFile) {
             let appDir = path.dirname(require.main.filename);
             chromosomeFile = path.join(appDir, '../', 'genes/chromosome');
         }
         this.chromosome = require(chromosomeFile).chromosome;
-        response(new euglena_template_1.euglena_template.being.alive.particles.Acknowledge("nucleus"));
+        this.send(new euglena_template_1.euglena_template.being.alive.particles.EuglenaHasBeenBorn("euglena.organelle.nucleus"));
     }
 }
 exports.Organelle = Organelle;
